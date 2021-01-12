@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en" class="h-100">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Что ближе: Лавка или пожарная часть?</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/cover/">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+      .cover-container {
+        max-width: 42em;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+
+    <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" integrity="
+    sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin="anonymous"></script>
+    <script src="https://npmcdn.com/leaflet-geometryutil"></script>
+  </head>
+
+<body class="d-flex h-100 text-right text-dark bg-white mb-auto">
+    
+<div class="cover-container d-flex w-300 h-300 p-3 mx-auto flex-column">
+  <header class="mt-auto mb-auto">
+    <div>
+      <h1 class="float-md-start mb-0">Что ближе к вашему дому: Лавка или пожарная?</h1>
+      <p>Автор: Телегина Мария</p>
+    </div>
+  </header>
+
+  <main class="px-2, mb-auto">
+    <h3>Исследовательский вопрос</h3>
+    <p class="lead">Согласно нормативным документам, радиус который обслуживает пожарное депо - 3 км, для Москвы эти значения еще меньше, 2 км или даже 1 км при высоте зданий более 100 м.</p>
+    <p class="lead">За последний год увеличилось число сервисов доставки продуктов, которые гарантируют доставку за минимальные 15-20 минут. Зона доставки в таких сервисах высчитывается практически по такому же радиусу, как и у пожарных депо.</p>
+    <h3>Поэтому захотелось выяснить: какая служба находится ближе к вашему дому?</h3>
+    
+  </main>
+
+  <footer class="mt-auto text-black-50">
+    <p>Источники данных: <a href="https://yandex.ru/maps/213/moscow/?from=api-maps&ll=37.660596%2C55.777343&mode=usermaps&origin=jsapi_2_1_74&rl=37.541991%2C55.683348~-0.011202%2C0.011997&um=constructor%3Aef98aa72c6ca1aa960d1c7e21fffce516545a183acebdf12aa6de63c6d7c2953&z=9" class="text-blue">Карта Яндекс Лавок</a>, <a href="https://www.moscowmap.ru/spravochnik/pozharnye-chasti/" class="text-blue">Карта пожарных частей Москвы</a></p>
+  </footer>
+</div>
+
+ <div id="mapid" style="width: 800px; height: 600px; display: block; margin: auto;"></div>
+<script>
+  const fireStations = [{"lat": 55.77847, "long": 37.63008}, {"lat": 55.73661, "long": 37.48723}, {"lat": 55.70459, "long": 37.74335}, {"lat": 55.61087, "long": 37.58847}, {"lat": 55.74913, "long": 37.97341}, {"lat": 55.80419, "long": 37.51518}, {"lat": 55.83859, "long": 37.63151}, {"lat": 55.7882, "long": 37.70831}, {"lat": 55.68253, "long": 37.54889}, {"lat": 55.73105, "long": 37.51389}, {"lat": 55.77164, "long": 37.72821}, {"lat": 55.71733, "long": 37.60271}, {"lat": 55.7882, "long": 37.70831}, {"lat": 55.78016, "long": 37.73053}, {"lat": 55.74223, "long": 37.83568}, {"lat": 55.78016, "long": 37.73053}, {"lat": 55.68592, "long": 37.48582}, {"lat": 55.72062, "long": 37.44545}, {"lat": 55.68253, "long": 37.54889}, {"lat": 55.65305, "long": 37.38478}, {"lat": 55.85994, "long": 37.51523}, {"lat": 55.79586, "long": 37.50721}, {"lat": 55.84714, "long": 37.57267}, {"lat": 55.83859, "long": 37.63151}, {"lat": 55.83859, "long": 37.63151}, {"lat": 55.83859, "long": 37.63151}, {"lat": 55.83859, "long": 37.63151}, {"lat": 55.82634, "long": 37.63771}, {"lat": 55.78601, "long": 37.48095}, {"lat": 55.85975, "long": 37.43393}, {"lat": 55.85975, "long": 37.43393}, {"lat": 55.7443, "long": 37.58945}, {"lat": 55.76764, "long": 37.63316}, {"lat": 55.68981, "long": 37.73689}, {"lat": 55.69629, "long": 37.84877}, {"lat": 55.75163, "long": 37.7136}, {"lat": 55.71733, "long": 37.60271}, {"lat": 55.66688, "long": 37.62669}, {"lat": 55.78281, "long": 37.71573}, {"lat": 55.88905, "long": 37.44056}, {"lat": 55.62841, "long": 37.83685}, {"lat": 55.65896, "long": 37.35753}, {"lat": 55.68221, "long": 37.72167}, {"lat": 55.61537, "long": 37.96465}, {"lat": 55.66668, "long": 37.94797}, {"lat": 55.78015, "long": 37.56913}, {"lat": 55.73105, "long": 37.51389}, {"lat": 55.92617, "long": 37.38813}, {"lat": 55.80353, "long": 37.55298}, {"lat": 55.81446, "long": 37.63268}, {"lat": 55.75076, "long": 37.60698}, {"lat": 55.68253, "long": 37.54889}, {"lat": 55.68253, "long": 37.54889}, {"lat": 55.7646, "long": 37.86591}, {"lat": 55.82955, "long": 37.59153}, {"lat": 55.70029, "long": 37.49566}, {"lat": 55.82782, "long": 37.45}, {"lat": 55.76473, "long": 37.6124}, {"lat": 55.72509, "long": 37.44666}, {"lat": 55.71279, "long": 37.72372}, {"lat": 55.41798, "long": 37.54794}, {"lat": 55.74381, "long": 37.6389}, {"lat": 55.78918, "long": 37.68183}, {"lat": 55.75163, "long": 37.7136}, {"lat": 55.81402, "long": 37.69473}, {"lat": 55.87399, "long": 37.68122}, {"lat": 55.74401, "long": 37.55117}, {"lat": 55.7994, "long": 37.78119}, {"lat": 55.94428, "long": 37.55628}, {"lat": 55.75294, "long": 37.66037}, {"lat": 55.68592, "long": 37.48582}, {"lat": 55.89894, "long": 37.38881}, {"lat": 55.63758, "long": 37.53579}, {"lat": 55.80746, "long": 37.39312}, {"lat": 55.71278, "long": 37.64629}, {"lat": 55.75795, "long": 37.83138}, {"lat": 55.7446, "long": 37.88298}, {"lat": 55.77221, "long": 37.41243}, {"lat": 55.78654, "long": 37.38649}, {"lat": 55.76764, "long": 37.63316}, {"lat": 55.79907, "long": 37.4629}, {"lat": 55.76278, "long": 37.61129}, {"lat": 55.82015, "long": 37.31934}, {"lat": 55.67924, "long": 37.88559}, {"lat": 55.68253, "long": 37.54889}, {"lat": 55.72165, "long": 37.46009}, {"lat": 55.60992, "long": 37.51387}, {"lat": 55.60992, "long": 37.51387}, {"lat": 55.67454, "long": 37.74142}, {"lat": 55.65143, "long": 37.5481}, {"lat": 55.83574, "long": 37.55232}, {"lat": 55.78918, "long": 37.68183}, {"lat": 55.78918, "long": 37.68183}, {"lat": 55.83859, "long": 37.63151}, {"lat": 55.70813, "long": 37.80864}, {"lat": 55.72517, "long": 37.47932}, {"lat": 55.76278, "long": 37.61129}, {"lat": 55.75093, "long": 37.71717}, {"lat": 55.90984, "long": 37.73225}, {"lat": 55.68003, "long": 37.26465}, {"lat": 55.75743, "long": 37.85773}, {"lat": 54.88264, "long": 38.06025}, {"lat": 55.74294, "long": 37.62764}, {"lat": 54.88264, "long": 38.06025}, {"lat": 55.42022, "long": 38.25733}, {"lat": 55.74485, "long": 37.97158}, {"lat": 55.59909, "long": 38.09171}, {"lat": 55.9657, "long": 37.92878}, {"lat": 55.667, "long": 37.94729}, {"lat": 55.63243, "long": 37.85405}, {"lat": 55.79963, "long": 37.56597}, {"lat": 55.74627, "long": 37.51207}, {"lat": 55.77538, "long": 37.47094}, {"lat": 55.78344, "long": 37.34868}, {"lat": 55.77786, "long": 37.71463}, {"lat": 55.63522, "long": 38.01003}, {"lat": 55.56277, "long": 37.87324}, {"lat": 55.69868, "long": 37.73238}, {"lat": 55.88433, "long": 37.75542}, {"lat": 56.12762, "long": 38.13931}, {"lat": 55.7787, "long": 38.45442}, {"lat": 55.81577, "long": 37.8619}, {"lat": 55.66009, "long": 37.69721}, {"lat": 55.75901, "long": 37.779}, {"lat": 55.85897, "long": 37.34337}, {"lat": 55.74485, "long": 37.97158}, {"lat": 55.75335, "long": 37.49958}, {"lat": 55.82982, "long": 37.81158}, {"lat": 55.90197, "long": 37.3953}, {"lat": 55.63002, "long": 37.47793}, {"lat": 55.89574, "long": 37.43819}, {"lat": 55.90087, "long": 37.53935}, {"lat": 55.81231, "long": 37.45699}];
+
+  const lavkaStations = [{"lat":55.889235,"long":37.42951},{"lat":55.901436,"long":37.403553},{"lat":55.890458,"long":37.443474},{"lat":55.892869,"long":37.473491},{"lat":55.886473,"long":37.558463},{"lat":55.864475,"long":37.569683},{"lat":55.886761,"long":37.585035},{"lat":55.891128,"long":37.619369},{"lat":55.880781,"long":37.693081},{"lat":55.925021,"long":37.720456},{"lat":55.90253,"long":37.715938},{"lat":55.917551,"long":37.830042},{"lat":55.881278,"long":37.539374},{"lat":55.87743,"long":37.587721},{"lat":55.877233,"long":37.718354},{"lat":55.866645,"long":37.396111},{"lat":55.862555,"long":37.477812},{"lat":55.870299,"long":37.499713},{"lat":55.869819,"long":37.631236},{"lat":55.758554,"long":37.838826},{"lat":55.841551,"long":37.357523},{"lat":55.862257,"long":37.44753},{"lat":55.86355,"long":37.673421},{"lat":55.834932,"long":37.664534},{"lat":55.844814,"long":37.42359},{"lat":55.846624,"long":37.498819},{"lat":55.838424,"long":37.529551},{"lat":55.827638,"long":37.373823},{"lat":55.81996,"long":37.58146},{"lat":55.809611,"long":37.459999},{"lat":55.815124,"long":37.512672},{"lat":55.814705,"long":37.563808},{"lat":55.81408,"long":37.626052},{"lat":55.813683,"long":37.655877},{"lat":55.805209,"long":37.708985},{"lat":55.81778,"long":37.808321},{"lat":55.819909,"long":37.828003},{"lat":55.810808,"long":37.364994},{"lat":55.79854,"long":37.400363},{"lat":55.818948,"long":37.702706},{"lat":55.789783,"long":37.461512},{"lat":55.801167,"long":37.494404},{"lat":55.799897,"long":37.501753},{"lat":55.807409,"long":37.521634},{"lat":55.802768,"long":37.556087},{"lat":55.802766,"long":37.584119},{"lat":55.794555,"long":37.603765},{"lat":55.795198,"long":37.700078},{"lat":55.795094,"long":37.772343},{"lat":55.797655,"long":37.796778},{"lat":55.815701,"long":37.324758},{"lat":55.794391,"long":37.522755},{"lat":55.77837,"long":37.493362},{"lat":55.786313,"long":37.542428},{"lat":55.785377,"long":37.572128},{"lat":55.788213,"long":37.615686},{"lat":55.785812,"long":37.673798},{"lat":55.778542,"long":37.691396},{"lat":55.784248,"long":37.721642},{"lat":55.770269,"long":37.864205},{"lat":55.769582,"long":37.408012},{"lat":55.774087,"long":37.47819},{"lat":55.767392,"long":37.559415},{"lat":55.771992,"long":37.6042},{"lat":55.771049,"long":37.632886},{"lat":55.769307,"long":37.684015},{"lat":55.773378,"long":37.821041},{"lat":55.743723,"long":37.428562},{"lat":55.757724,"long":37.518371},{"lat":55.759106,"long":37.548788},{"lat":55.761414,"long":37.636324},{"lat":55.765144,"long":37.717411},{"lat":55.766628,"long":37.7327},{"lat":55.747301,"long":37.767462},{"lat":55.760226,"long":37.778667},{"lat":55.73579,"long":37.86354},{"lat":55.750748,"long":37.597863},{"lat":55.747753,"long":37.678886},{"lat":55.749237,"long":37.877194},{"lat":55.723349,"long":37.39965},{"lat":55.746924,"long":37.409097},{"lat":55.736265,"long":37.493632},{"lat":55.743902,"long":37.54583},{"lat":55.737811,"long":37.57165},{"lat":55.744936,"long":37.615057},{"lat":55.736873,"long":37.63606},{"lat":55.737456,"long":37.655771},{"lat":55.745666,"long":37.79737},{"lat":55.738008,"long":37.834848},{"lat":55.749172,"long":37.848817},{"lat":55.72865,"long":37.424947},{"lat":55.733472,"long":37.682062},{"lat":55.72222,"long":37.427483},{"lat":55.722588,"long":37.452103},{"lat":55.694079,"long":37.488943},{"lat":55.72706,"long":37.534811},{"lat":55.722517,"long":37.613656},{"lat":55.715657,"long":37.621929},{"lat":55.71878,"long":37.646139},{"lat":55.718202,"long":37.672855},{"lat":55.718136,"long":37.826161},{"lat":55.712243,"long":37.488273},{"lat":55.704473,"long":37.514922},{"lat":55.705619,"long":37.615097},{"lat":55.660577,"long":37.744405},{"lat":55.67258,"long":37.507753},{"lat":55.682358,"long":37.911111},{"lat":55.68858,"long":37.850175},{"lat":55.681087,"long":37.58862},{"lat":55.679245,"long":37.687686},{"lat":55.651111,"long":37.557254},{"lat":55.675595,"long":37.627051},{"lat":55.653679,"long":37.608405},{"lat":55.594285,"long":37.613233},{"lat":55.629877,"long":37.512802},{"lat":55.608053,"long":37.580167},{"lat":55.58493,"long":37.661653}];
+
+  var mymap = L.map('mapid').setView([55.753215, 37.622504], 10);
+  L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    maxZoom: 18,
+    id: 'mapbox/light-v10',
+    tileSize: 512,
+    zoomOffset: -1,
+    accessToken: 'pk.eyJ1IjoicG9udG9yYW1vbmEiLCJhIjoiY2s1bWk5amJ4MG1yNzNrcXB5b296amJxcCJ9.NkCpEG3R5psBPC3B14SD3Q'
+  }).addTo(mymap);
+
+  var lavkaIcon = L.icon({
+    iconUrl: 'https://i.ibb.co/4FnXJ5x/Group-1.png',
+    shadowUrl: 'https://i.ibb.co/NKGdBNb/Ellipse-3.png',
+    iconSize:     [25, 39.5], // size of the icon
+    shadowSize:   [25.73, 24.9], // size of the shadow
+    iconAnchor:   [14.5, 39], // point of the icon which will correspond to marker's location
+    shadowAnchor: [3, 25.5],  // the same for the shadow
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+  });
+
+  var fireIcon = L.icon({
+    iconUrl: 'https://i.ibb.co/FBqwFpq/Group-2.png',
+    shadowUrl: 'https://i.ibb.co/NKGdBNb/Ellipse-3.png',
+    iconSize:     [25, 39.5], // size of the icon
+    shadowSize:   [25.73, 24.9], // size of the shadow
+    iconAnchor:   [14.5, 39], // point of the icon which will correspond to marker's location
+    shadowAnchor: [3, 25.5],  // the same for the shadow
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+  });
+
+  for (const station of fireStations) {
+    var marker = L.marker([station.lat, station.long], {title: "Пожарная", icon:fireIcon}).addTo(mymap);
+  }
+
+  for (const station of lavkaStations) {
+      var marker = L.marker([station.lat, station.long], {title: "Лавка", icon:lavkaIcon}).addTo(mymap);
+  }
+
+  var popup = L.popup();
+
+  function distance(x, y) {
+    const dlat = (x.lat - y.lat);
+    const dlng = (x.long - y.long);
+    return Math.sqrt(dlat * dlat + dlng * dlng);
+  }
+
+  function onMapClick(e) {
+    const click = {lat: e.latlng.lat, long: e.latlng.lng};
+
+    var closest = "";
+    var minDistance = 1e8;
+
+    for (const station of fireStations) {
+      const d = distance(click, station);
+      if (d < minDistance) {
+        closest = "пожарная часть";
+        minDistance = d;
+      }
+    }
+
+    for (const station of lavkaStations) {
+      const d = distance(click, station);
+      if (d < minDistance) {
+        closest = "лавка";
+        minDistance = d;
+      }
+    }
+
+    popup
+    .setLatLng(e.latlng)
+    .setContent("Здесь ближе " + closest)
+    .openOn(mymap);
+  }
+
+  mymap.on('click', onMapClick);
+</script>
+</body>
+</html>
